@@ -29,7 +29,7 @@ const ItemsCategory = ({route}) => {
         console.log(item.key)
         navigation.navigate(
           'ItemDetail',
-          {key:item.key, ItemImage : item.Image,ItemTitle:item.title,ItemPrice:item.Price,ItemDescription:item.Description,ItemAvailable:item.AvailableQTY})
+          {key:item.key, ItemImage : item.Image,ItemTitle:item.title,ItemPrice:item.Price,ItemDescription:item.Description,ItemAvailable:item.AvailableQTY,Category:itemName})
       }
   return (
     <SafeAreaView style={{flex:1,padding:0}}>
@@ -39,20 +39,20 @@ const ItemsCategory = ({route}) => {
         <View style={{flex:0.3,backgroundColor:'rgba(0,0,0,0)',flexDirection: 'row',}}>
           <TextInput style={styles.searchBox} placeholder='Search here' value={searchedText} onChangeText={handleSearch}></TextInput>
           <TouchableOpacity style={styles.searchButton}>
-          <Icon name="search" size={24} color="black" style={{marginLeft:20,marginTop:6}}/>
+          <Icon name="search" size={24} color="#ffffff" style={{marginLeft:20,marginTop:6}}/>
           </TouchableOpacity>
         </View>
-        <Text style={{marginTop:10,fontSize:25,fontWeight:'bold',borderBottomWidth:1,alignSelf:'center',marginBottom:20}}>{itemName} List</Text>
+        <Text style={{marginTop:10,fontSize:25,fontWeight:'bold',alignSelf:'center',marginBottom:20}}>{itemName} List</Text>
         </ScrollView>   
         <FlatList
         data={itemList}
         keyExtractor={(item) => item.key}
         renderItem={({item})=>(
             <TouchableOpacity style={styles.FlatListStyle} onPress={() =>handleFlatListOnPress(item)}>
-                <View style={{height:150,width:"43%",borderWidth:1,borderRadius:20,borderBottomRightRadius:0,borderTopRightRadius:0,overflow: 'hidden'}}>
+                <View style={{height:150,width:"43%",borderWidth:0.5,borderRadius:20,borderBottomRightRadius:0,borderTopRightRadius:0,overflow: 'hidden'}}>
                 <Image source={{ uri:item.Image }} style={{height:"100%",width:"100%"}}/>
                 </View>
-                <View style={{height:150,width:"57%",borderWidth:1,borderRadius:20,borderBottomLeftRadius:0,borderTopLeftRadius:0,padding:10}}>
+                <View style={{height:150,width:"57%",borderWidth:0.5,borderRadius:20,borderBottomLeftRadius:0,borderTopLeftRadius:0,padding:10}}>
 
                     <Text style={{fontWeight:'bold',fontSize:20}}>{item.title}</Text>
                     <Text style={{fontWeight:'bold',fontSize:20}}>Price per KG RS: {item.Price} </Text>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
       },
       searchButton:{
         marginTop:8,
-        backgroundColor:'#90EE90',
+        backgroundColor:'#000000',
         borderRadius:10,
         height:40,
         width:"20%",

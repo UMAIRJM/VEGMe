@@ -1,14 +1,15 @@
 
-import { AddItem, RemoveItem } from "./ActionType"
+
+import { AddItem, RemoveItem, ClearAll } from "./ActionType";
 
 const initialState =[]
 export const Reducer =(state=initialState,action)=>{
     switch(action.type){
         case AddItem:
-            console.log('in reducer',action.payload)
+            
             const ExistingItem = state.find(item => item.key === action.payload.key)
             if (ExistingItem){
-                if(ExistingItem.Quantity+action.payload.Quantity > action.payload.Available ) {
+                if(action.payload.Quantity > ExistingItem.Available ) {
                     return state; 
                     
                 }
@@ -23,13 +24,18 @@ export const Reducer =(state=initialState,action)=>{
                 }
             }
             else{
+                
+
             return[...state,action.payload]
+            console.log(action.payload)
             }
-            case RemoveItem:
-            const DeleteArray = state.filter((item,index)=>{
-                return (index !== action.payload )
-            });
-            return DeleteArray;
+        case RemoveItem:
+                const keyToRemove = action.payload;
+                const deleteArray = state.filter((item) => item.key !== keyToRemove);
+                return deleteArray;
+        case ClearAll:
+            return [];
+
         default:
             return state;
     }

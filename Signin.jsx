@@ -2,6 +2,7 @@ import { View, Text,ActivityIndicator ,StyleSheet, ImageBackground, TextInput,To
 import React ,{useState,useEffect}from 'react'
 import {auth} from "./firebase"
 import  {createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged} from "firebase/auth"
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Signin = ({navigation}) => {
  
@@ -27,7 +28,7 @@ const Signin = ({navigation}) => {
     await signInWithEmailAndPassword(auth,email,password)
     .then (()=>{
       setIsLoading(false)
-      navigation.navigate('Home')
+      navigation.replace('Home')
 
     })
     .catch((error)=>{
@@ -43,6 +44,7 @@ const Signin = ({navigation}) => {
   //   console.log(email);
   // }, [email]);
   return (
+    <SafeAreaView style={{flex:1}}>
     <ScrollView style={styles.container}>
       <Text style={{marginTop:80,marginBottom:30,fontSize:60,color:"black"}}>Welcome {"\n"}Back</Text>
       
@@ -50,13 +52,14 @@ const Signin = ({navigation}) => {
       <TextInput placeholder='Enter Password' style={styles.input} secureTextEntry={true} value={password} onChangeText={handleChangeText2}/>
       {errorMessage? <Text>{errorMessage}</Text>:null}
       <TouchableOpacity style={{marginTop:10,marginLeft:200}}><Text style={{fontSize:15}}>Forgot Password</Text></TouchableOpacity>
-    {isLoading ? <ActivityIndicator size="large" color='#90EE90' />:null}
-    <TouchableOpacity style={styles.button} onPress={handleSignin}><Text style={{fontSize:22}}>Sign in</Text></TouchableOpacity>
+    {isLoading ? <ActivityIndicator size="large" color='#000000' />:null}
+    <TouchableOpacity style={styles.button} onPress={handleSignin}><Text style={{fontSize:22,color:'#ffffff'}}>Sign in</Text></TouchableOpacity>
     <Text style={{marginLeft:"50%",fontSize:20}}>Or</Text>
     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Signup')}>
-        <Text style={{fontSize:22}}>Sign up</Text>
+        <Text style={{fontSize:22,color:'#ffffff'}}>Sign up</Text>
         </TouchableOpacity>
     </ScrollView>
+    </SafeAreaView>
     
   )
 }
@@ -83,15 +86,16 @@ const styles = StyleSheet.create({
         borderBottomWidth:0.7
     },
     button:{
-        width:"100%",
-        height:50,
-        borderWidth:0.7,
-        marginTop:20,
-        alignItems:'center',
-        borderRadius:50,
-        backgroundColor:'#90EE90',
-        padding:10
-        
-    }
+    
+      width:"100%",
+      height:50,
+      borderWidth:0.7,
+      marginTop:20,
+      alignItems:'center',
+      borderRadius:10,
+      backgroundColor:'#000000',
+      padding:10
+      
+  }
   });
   

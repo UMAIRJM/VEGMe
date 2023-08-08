@@ -2,6 +2,7 @@ import { View, Text,ActivityIndicator ,StyleSheet, ImageBackground, TextInput,To
 import React ,{useState,useEffect}from 'react'
 import {auth} from "./firebase"
 import  {createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged} from "firebase/auth"
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 const Signin = ({ navigation }) => {
@@ -73,7 +74,7 @@ const Signin = ({ navigation }) => {
   } 
 
   return (
-   // <ImageBackground source={require('./assets/Background.jpg')} resizeMode="cover" style={styles.Background}>
+   <SafeAreaView style={{flex:1}}>
     <ScrollView style={styles.container}>
       <Text style={{marginTop:80,fontSize:60,color:"black"}}>Create {"\n"}Account</Text>
       <TextInput placeholder='Your Name' style={styles.input} value={name} onChangeText={handleName}/>
@@ -82,11 +83,11 @@ const Signin = ({ navigation }) => {
      
      <TextInput placeholder='Confirm Password' secureTextEntry={true} style={styles.input} value={confirmPassword} onChangeText={handleConfirmPassword}/>
      {errorMessage? <Text style={{fontSize:20,marginTop:10,color:'#8B0000'}}>{errorMessage}</Text>:null}
-    {isLoading ? <ActivityIndicator size={'large'} color='#90EE90' />:null}
-    <TouchableOpacity style={styles.button} onPress={handleSignup}><Text style={{fontSize:22}}>Sign up</Text></TouchableOpacity>
+    {isLoading ? <ActivityIndicator size={'large'} color='#000000' />:null}
+    <TouchableOpacity style={styles.button} onPress={handleSignup}><Text style={{fontSize:22,color:'#ffffff'}}>Sign up</Text></TouchableOpacity>
    
     </ScrollView>
-    // </ImageBackground>
+       </SafeAreaView>
   )
 }
 
@@ -112,15 +113,16 @@ const styles = StyleSheet.create({
         borderBottomWidth:0.7
     },
     button:{
-        width:"100%",
-        height:50,
-        borderWidth:0.7,
-        marginTop:38,
-        alignItems:'center',
-        borderRadius:50,
-        backgroundColor:'#90EE90',
-        padding:10
-        
-    }
+    
+      width:"100%",
+      height:50,
+      borderWidth:0.7,
+      marginTop:20,
+      alignItems:'center',
+      borderRadius:10,
+      backgroundColor:'#000000',
+      padding:10
+      
+  }
   });
   

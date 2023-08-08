@@ -1,20 +1,29 @@
-import { View,ActivityIndicator, Modal,Text ,StyleSheet,ImageBackground,TextInput,ScrollView,TouchableOpacity,FlatList,Image} from 'react-native'
+import { Alert ,View,ActivityIndicator, Modal,Text ,StyleSheet,ImageBackground,TextInput,ScrollView,TouchableOpacity,FlatList,Image} from 'react-native'
 import React, {useState,useEffect}from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AddItemToCart } from './ReduxFiles/Action';
+import  app from './firebase'
+import {getDatabase , ref, onValue} from 'firebase/database'
+import { auth } from './firebase';
 
 const ItemDetail = ({route}) => {
-    const { key,ItemImage ,ItemTitle,ItemPrice,ItemDescription,ItemAvailable} = route.params;
-    const Available = parseInt(ItemAvailable)
+    const { key,ItemImage ,ItemTitle,ItemPrice,ItemDescription,ItemAvailable,Category} = route.params;
+    const Available = ItemAvailable
     const Price = ItemPrice
     const[quantity,setQuatity] = useState(0)
     const[error,setError] = useState('')
     const[computedAmount,setComputedAmount] = useState(0)
     const navigation = useNavigation()
+    const[pendingOrderData,setPendingOrderData] = useState([])
+    const user = auth.currentUser;
+    const  user_ID= user.uid
+    const [order,setOrder] = useState(false)
     const Dispatch = useDispatch()
+    const data = useSelector(state => state)
+
     const item ={
         key: key,
         Image: ItemImage,
@@ -22,7 +31,8 @@ const ItemDetail = ({route}) => {
         Price:Price,
         TotalPrice:computedAmount,
         Quantity:quantity,
-        Available:Available
+        Available:Available - quantity,
+        Category: Category
     }
     const handleRemove =()=>{
         if(quantity<=0){
@@ -40,9 +50,32 @@ const ItemDetail = ({route}) => {
         }else{
         setError('')
         //Dispatched is used to send Data to store we created in redux react native
+       
         Dispatch(AddItemToCart(item))
-        navigation.navigate('Cart')
-       }
+        const filterData = data.filter((item) => item.key === key)
+        console.log(filterData)
+       if(filterData.length > 0){
+        const newAvailable = filterData[0].Available
+        const newQuantity = filterData[0].Quantity
+        if(newAvailable < quantity)
+        {
+            const errorMess = `Item is not added to cart.
+            \n Available Quantity is ${newAvailable}.
+            \n And You Already Added ${newQuantity} kg in to Cart.`;
+            console.log(newAvailable)
+            Alert.alert('Exceed Available',errorMess.toString(), [{ text: 'OK' }]);
+            
+        }
+        else{
+            Alert.alert('Added', 'Item is added to cart', [{ text: 'OK' }]);
+    
+        }
+    }
+    else{
+        Alert.alert('Added', 'Item is added to cart', [{ text: 'OK' }]);
+
+    }
+}
 }
     const handleAdd =()=>{
         if (quantity >= Available){
@@ -58,10 +91,42 @@ const ItemDetail = ({route}) => {
 
     useEffect(()=>{
         setComputedAmount(quantity * Price)
-        console.log(key)
+        
     },[quantity])
    
+useEffect(()=>{
+    const db = getDatabase(app);
+    const dbRef = ref(db,'PendingOrders');
+    console.log('Receiving data');
+    onValue(dbRef,(snapshot)=>{
+      
+      let data = snapshot.val();
+      setPendingOrderData(data)
+      
+      console.log('Received',pendingOrderData)
+    //   if(pendingOrderData !== null && pendingOrderData.length > 0){
+    //     console.log('I am null')
+    //     CheckOrder()
 
+        
+    //   }
+    //   else{
+    //     setOrder(false)
+    //   }
+       
+    })
+},[])
+useEffect(()=>{
+    const extractedData = Object.keys(pendingOrderData).filter(userId => userId === user_ID);
+    if (extractedData.length > 0){
+        setOrder(true)
+        console.log(extractedData)
+    }
+    else{
+        console.log('I am in else')
+        setOrder(false)
+    }
+})
 
     return (
     <SafeAreaView style={styles.container}>
@@ -93,7 +158,8 @@ const ItemDetail = ({route}) => {
             </View>
             {error? <Text style={{fontSize:20,color:"red",margin:5}}>{error}</Text>:null}
             <Text style={{fontSize:30,marginTop:10,margin:5}}>Price: {computedAmount} </Text>
-            <TouchableOpacity style={styles.button} onPress={handleAddToCart}><Text style={{fontSize:22}}>Add to cart</Text></TouchableOpacity>
+            {order ? <Text style={{fontSize:30,color:'red'}}>You already placed order{'\n'} wait  until first order is delivered</Text>:            <TouchableOpacity style={styles.button} onPress={handleAddToCart}><Text style={{fontSize:22,color:'#ffffff'}}>Add to cart</Text></TouchableOpacity>
+}
 
         </View>
     </SafeAreaView>
@@ -112,13 +178,14 @@ const styles = StyleSheet.create({
       // justifyContent: 'center',
     },
     button:{
+    
         width:"100%",
         height:50,
         borderWidth:0.7,
         marginTop:20,
         alignItems:'center',
-        borderRadius:50,
-        backgroundColor:'#90EE90',
+        borderRadius:10,
+        backgroundColor:'#000000',
         padding:10
         
     }

@@ -66,14 +66,14 @@ const Home = () => {
         <View style={{flex:0.3,backgroundColor:'rgba(0,0,0,0)',flexDirection: 'row',}}>
           <TextInput style={styles.searchBox} placeholder='Search here' value={searchedText} onChangeText={handleSearch}></TextInput>
           <TouchableOpacity style={styles.searchButton}>
-          <Icon name="search" size={24} color="black" style={{marginLeft:20,marginTop:6}}/>
+          <Icon name="search" size={24} color="#ffffff" style={{marginLeft:20,marginTop:6}}/>
           </TouchableOpacity>
         </View>
         <View style={{backgroundColor:'rgba(0,0,0,0)',marginTop:20,height:30,flexDirection:'row',justifyContent: 'space-between'}}>
           <Text style={{fontSize:25,fontWeight:'bold',color:"black"}}>Vegetables Categories</Text>
           <TouchableOpacity style={{textAlign:'left',marginTop:5}} onPress={handleSeeAll}><Text style={{fontSize:20,color:"black"}}>See All</Text></TouchableOpacity>
         </View>
-        {isLoading? <ActivityIndicator size="large" color='#90EE90' style={styles.ActivityIndicatorStyle}/>:null}
+        {isLoading? <ActivityIndicator size="large" color='#000000' style={styles.ActivityIndicatorStyle}/>:null}
         <Modal visible ={seeAll} transparent={true} animationType="fade"style={{backgroundColor:"white",}}>
           
           <View style={{flex:1,backgroundColor:"white",marginHorizontal:40,marginVertical:130,padding:10,borderRadius:10,borderWidth:1}}>
@@ -108,7 +108,7 @@ const Home = () => {
         renderItem={({item})=>(
           <TouchableOpacity style={styles.flatlistView} onPress={() => handleFlatlist1(item)}>
 
-          <Image source={{ uri:item.image }} style={{height:90,width:150,borderRadius:30,borderBottomLeftRadius:0,borderBottomRightRadius:0}}/>
+          <Image source={{ uri:item.image }} style={{height:90,width:150}}/>
           <Text style={{fontSize:20,color:"black",margin:6,alignSelf:'center'}}>{item.title}</Text>
 
           </TouchableOpacity>
@@ -118,7 +118,7 @@ const Home = () => {
           <Text style={{fontSize:25,fontWeight:'bold',color:"black",}}>Mostly  Ordered</Text>
           <TouchableOpacity style={{textAlign: 'left',marginTop:5}}><Text style={{fontSize:20,color:"black"}}>See All</Text></TouchableOpacity>
         </View>
-        {isLoading? <ActivityIndicator size="large" color='#90EE90' style={styles.ActivityIndicatorStyle}/>:null}
+        {isLoading? <ActivityIndicator size="large" color='#000000' style={styles.ActivityIndicatorStyle}/>:null}
         <FlatList
         style={{marginTop:15}}
         horizontal={true}
@@ -128,9 +128,9 @@ const Home = () => {
           <TouchableOpacity style={styles.flatlistView}>
             
 
-          <Image source={{ uri:item.image }} style={{height:90,width:150,borderRadius:30,borderBottomLeftRadius:0,borderBottomRightRadius:0}}/>
+          <Image source={{ uri:item.image }} style={{height:90,width:150}}/>
           <Text style={{fontSize:20,color:"black",alignSelf:'center',margin:6}}>{item.title}</Text>
-          <Text style={{fontSize:20,color:"black",alignSelf:'center',fontWeight:'bold'}}>Price per Kg RS:{item.price}</Text>
+          
 
           </TouchableOpacity>
         )}
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   searchButton:{
     marginTop:8,
-    backgroundColor:'#90EE90',
+    backgroundColor:'#000000',
     borderRadius:10,
     height:40,
     width:"20%",
@@ -188,11 +188,13 @@ const styles = StyleSheet.create({
     
     padding:0,
     marginLeft:15,
-    borderRadius:30,
+    borderRadius:15,
+    overflow:'hidden',
     // backgroundColor:'#90EE90',
     backgroundColor:'rgba(0,0,0,0)',
-    borderWidth:1,
-    borderColor:"black"
+    borderBottomWidth:0.5,
+    borderTopWidth:0.3
+    
   },
   ModalflatlistView:{
     borderWidth:1,
